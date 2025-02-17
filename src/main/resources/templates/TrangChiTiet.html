@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{users/home/Product-detail}">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+    <script>
+        function themSanPhamVaoGioHang(button) {
+            var maSanPham = button.getAttribute('data-ma-san-pham');
+
+            fetch('/users/giohang/them?maSanPham=' + maSanPham, {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi thêm sản phẩm vào giỏ hàng!');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Sản phẩm đã được thêm vào giỏ hàng!');
+                    alert('Thêm thành công');
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+                });
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="container">
+    <div class="row row-pb-lg product-detail-wrap">
+        <div class="col-sm-6">
+            <div class="owl-carousel">
+                <th:block th:each=" a : ${lstAnh}">
+                    <div class="item">
+                        <div class="product-entry border">
+                            <a href="#" class="prod-img">
+                                <img th:src="@{'/images/' + ${a.anhSanPham}}" class="img-fluid"
+                                     alt="Free html5 bootstrap 4 template">
+                            </a>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="product-desc">
+                <h3>[[${sanPham.TenSanPham}]]</h3>
+                <p class="price">
+                    <span>[[${sanPham.GiaTien}]] VNĐ</span>
+                    <span class="rate">
+									<i class="icon-star-full"></i>
+									<i class="icon-star-full"></i>
+									<i class="icon-star-full"></i>
+									<i class="icon-star-full"></i>
+									<i class="icon-star-half"></i>
+									(0 Rating)
+								</span>
+                </p>
+                <p>[[${sanPham.MoTa}]]</p>
+                <div style="display: flex;">
+                    <div>
+                        <button class="btn btn-primary them-vao-gio-hang" title="Thêm vào giỏ hàng"
+                                th:data-ma-san-pham="${sanPham.maSanPham}"
+                                onclick="themSanPhamVaoGioHang(this)"> Thêm vào giỏ
+                            hàng
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary">
+                            <a style="color: white;" th:href="@{/sanpham}"> Trở về </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-md-12 pills">
+                    <div class="bd-example bd-example-tabs">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <!--                            <li class="nav-item">-->
+                            <!--                                <a class="nav-link active" id="pills-description-tab" data-toggle="pill"-->
+                            <!--                                   href="#pills-description" role="tab" aria-controls="pills-description"-->
+                            <!--                                   aria-expanded="true"> Mô tả</a>-->
+                            <!--                            </li>-->
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
+                                   href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
+                                   aria-expanded="true"> Nội dung</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-review-tab" data-toggle="pill"
+                                   href="#pills-review" role="tab" aria-controls="pills-review"
+                                   aria-expanded="true">Đánh giá</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="pills-tabContent">
+                            <!--                            <div class="tab-pane border fade show active" id="pills-description" role="tabpanel"-->
+                            <!--                                 aria-labelledby="pills-description-tab">-->
+                            <!--                                <h6> [[${sanPham.MoTa}]] </h6>-->
+                            <!--                            </div>-->
+
+                            <div class="tab-pane border fade" id="pills-manufacturer" role="tabpanel"
+                                 aria-labelledby="pills-manufacturer-tab">
+                                <h6> [[${sanPham.NoiDung}]] </h6>
+                            </div>
+
+                            <div class="tab-pane border fade" id="pills-review" role="tabpanel"
+                                 aria-labelledby="pills-review-tab">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h3 class="head">Đánh giá</h3>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="rating-wrap">
+                                            <h3 class="head">Điểm</h3>
+                                            <div class="wrap">
+                                                <p class="star">
+										   				<span>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					(0%)
+									   					</span>
+                                                    <span>0 Reviews</span>
+                                                </p>
+                                                <p class="star">
+										   				<span>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					(0%)
+									   					</span>
+                                                    <span>0 Reviews</span>
+                                                </p>
+                                                <p class="star">
+										   				<span>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					(0%)
+									   					</span>
+                                                    <span>0 Reviews</span>
+                                                </p>
+                                                <p class="star">
+										   				<span>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					(0%)
+									   					</span>
+                                                    <span>0 Reviews</span>
+                                                </p>
+                                                <p class="star">
+										   				<span>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					<i class="icon-star-empty"></i>
+										   					(0%)
+									   					</span>
+                                                    <span>0 Reviews</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title> Đơn hàng chi tiết</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý đơn hàng</h1>
+            <p>Thông tin đơn hàng chi tiết trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="col-12">
+                    <div class="return">
+                        <a th:href="@{/admin/donhang}"><h6> <i class="ti-angle-left"></i> Trở lại </h6> </a>
+                        <h6>Mã đơn hàng: [[${hoaDon.MaHoaDon}]] </h6>
+                    </div>
+                </div>
+                <div class="tile-body">
+                    <div class="order-details order-bill" style="margin-top: 20px;">
+                        <div>
+                            <h3> Địa chỉ nhận hàng </h3>
+                            <p> [[${hoaDon.NguoiMua}]]</p>
+                            <p> [[${hoaDon.SoDienThoai}]]</p>
+                            <p> [[${hoaDon.DiaChi}]] </p>
+                        </div>
+                        <div class="vertical-line">
+
+                        </div>
+                        <div class="order-status">
+                            <p th:text="${#temporals.format(hoaDon.ngayDatHang, 'dd-MM-yyyy')}"> </p>
+                            <p> Trạng thái: Đã thanh toán </p>
+                        </div>
+                    </div>
+                    <th:block th:each="hd : ${lstHoaDon}">
+                        <div class="order-details">
+                            <div class="order-item">
+                                <div class="row align-items-center">
+                                    <div class="col-2">
+                                        <img th:src="@{'/images/' + ${hd.anhSanPham}}"
+                                             alt="Product Image" class="product-image">
+                                    </div>
+                                    <div class="col-6 product-info">
+                                        <h6 class="product-name" th:text="${hd.tenSanPham}"></h6>
+                                        <p class="product-quantity">x <span th:text="${hd.soLuong}"> </span></p>
+                                        <div class="product-price">
+                                            <h6>Thành tiền: <span style="padding-left: 5px;"
+                                                                  th:text="${#numbers.formatDecimal(hd.giaTien, 0, 'COMMA', 0, 'POINT')}"
+                                                                  class="mb-0"> </span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                    <div style="text-align: right;">
+                        <div>
+                            <h4 style="color: #ee4d2d;"> Tổng tiền: <span th:text="${#numbers.formatDecimal(hoaDon.tongTien, 0, 'COMMA', 0, 'POINT')}"> [[${hoaDon.TongTien}]] </span> </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .return {
+            margin-top: 10px;
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .order-bill {
+            display: flex;
+        }
+
+        .vertical-line {
+            width: 1px;
+            height: 120px;
+            background-color: #ddd;
+            margin-left: 20px;
+        }
+
+        .order-status {
+            margin: 45px 0 0 15px;
+        }
+
+        .order-details {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 4px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .product-info {
+            margin-left: 15px;
+            display: flex;
+            flex-direction: column; /* Căn theo cột */
+            flex: 1;
+        }
+
+        .product-name {
+            background-color: white;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-quantity {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .product-price h6 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .row.align-items-center {
+            align-items: flex-start !important;
+        }
+    </style>
+</div>
+</body>
+</html>

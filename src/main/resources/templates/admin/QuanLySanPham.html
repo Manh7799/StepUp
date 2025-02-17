@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+    <!-- Bạn có thể thêm CSS và các tài nguyên khác ở đây -->
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý Sản phẩm</h1>
+            <p>Danh sách thông tin sản phẩm trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="padding: 0">
+            <div class="tile" style="padding: 20px;">
+                <div class="tile-body">
+                    <form method="post" th:action="@{/admin/sanpham}" th:object="${sanPham}">
+                        <fieldset>
+                            <legend>Nhập thông tin tìm kiếm</legend>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-1">Từ khóa:</div>
+                                        <div class="col-md-5">
+                                            <input th:field="*{tuKhoa}" th:class="form-control" placeholder="Nhập từ khóa"/>
+                                        </div>
+                                        <div class="col-md-1">
+                                            Chủ đề:
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select th:field="*{maChuDe}" th:class="form-control">
+                                                <option value="" label="Chọn chủ đề"/>
+                                                <th:block th:each="c : ${lstChuDe}">
+                                                    <option th:value="${c.maChuDe}">[[${c.tenChuDe}]]</option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            Mã hãng:
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select th:field="*{maHang}" th:class="form-control">
+                                                <option value="" label="Chọn hãng giày"/>
+                                                <th:block th:each="mh : ${lstHangGiay}">
+                                                    <option th:value="${mh.maHang}">[[${mh.tenHang}]]</option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            Mã nhà cung cấp:
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select th:field="*{maNhaCungCap}" th:class="form-control">
+                                                <option value="" label="Chọn hãng giày"/>
+                                                <th:block th:each="ncc : ${lstNhaCungCap}">
+                                                    <option th:value="${ncc.maNhaCungCap}">[[${ncc.maNhaCungCap}]]</option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px">
+                                    <div class="row">
+                                        <div class="col-md-1">Giá tiền từ:</div>
+                                        <div class="col-md-5">
+                                            <input type="number" name="giaTienMin" th:class="form-control" th:value="${giaTienMin}" placeholder="Nhập giá tiền" />
+                                        </div>
+                                        <div class="col-md-1">
+                                            đến:
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="number" name="giaTienMax" th:class="form-control" th:value="${giaTienMax}" placeholder="Nhập giá tiền"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="text-align: right; margin-top: 10px">
+                                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div style="text-align: right; width:100%;">
+                        <a th:href="@{/admin/sanpham/them}">Thêm mới</a>
+                    </div>
+                    <div style="padding-bottom: 10px">
+                        <div style="padding-right: 10px">
+                            <input type="checkbox" id="cbxChonTatCa">
+                            <button class="btn btn-primary" id="btnBoDuyetTatCa">Bỏ duyệt tất cả</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" style="font-size: 12px">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Ảnh SP</th>
+                                <th>Mã SP</th>
+                                <th>Tên SP</th>
+                                <th>Giá tiền</th>
+                                <th>Số lượng</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày CN</th>
+                                <th>Ngày duyệt</th>
+                                <th>Người duyệt</th>
+                                <th>Trạng thái</th>
+                                <th>Mã hãng</th>
+                                <th>Mã NCC</th>
+                                <th>Mã CĐ</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="s : ${lstSanPham}">
+                                <tr>
+                                    <td><input type="checkbox" class="cbxCheck"></td>
+                                    <td style="width:120px; overflow:hidden; padding: 5px;">
+                                        <img th:src="@{'/images/' + ${s.anh}}"
+                                             style="max-width:100%; max-height: 120px; display: block; margin:auto;"/>
+                                    </td>
+                                    <td>[[${s.maSanPham}]]</td>
+                                    <td>[[${s.tenSanPham}]]</td>
+                                    <td>[[${s.giaTien}]]</td>
+                                    <td>[[${s.soLuong}]]</td>
+                                    <td>[[${s.ngayTao}]]</td>
+                                    <td>[[${s.ngayCapNhat}]]</td>
+                                    <td>[[${s.ngayDuyet}]]</td>
+                                    <td>[[${s.nguoiDuyet}]]</td>
+                                    <th:block th:if="${s.daDuyet} == 1">
+                                        <td>Đã duyệt</td>
+                                    </th:block>
+                                    <th:block th:if="${s.daDuyet} == 0">
+                                        <td>Chưa duyệt</td>
+                                    </th:block>
+                                    <td>[[${s.maHang}]]</td>
+                                    <td>[[${s.maNhaCungCap}]]</td>
+                                    <td>[[${s.maChuDe}]]</td>
+                                    <td>
+                                        <a class="btn btn-primary" th:href="@{'/admin/sanpham/sua/' + ${s.maSanPham}}">Sửa</a>
+                                        &nbsp;
+                                        <a class="btn btn-danger" th:href="@{'/admin/sanpham/xoa/' + ${s.maSanPham}}"
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa thông tin này ?');">Xóa</a>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const selectAllCheckBox = document.getElementById('cbxChonTatCa');
+            const childCheckBoxes = document.querySelectorAll('.cbxCheck');
+            const btnBoDuyetTatCa = document.getElementById('btnBoDuyetTatCa');
+
+            // Sự kiện khi chọn "Chọn tất cả"
+            selectAllCheckBox.addEventListener('change', function () {
+                const isChecked = this.checked;
+                childCheckBoxes.forEach(checkBox => {
+                    checkBox.checked = isChecked;
+                });
+            });
+
+            //Duyệt sản phẩm
+            btnBoDuyetTatCa.addEventListener('click', function () {
+                const selectedProductIds = [];
+                childCheckBoxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        const row = checkbox.closest('tr'); // Lấy dòng chứa checkbox
+                        const productId = row.querySelector('td:nth-child(3)').textContent; // Lấy mã sản phẩm từ cột thứ 3
+                        selectedProductIds.push(productId);
+                    }
+                });
+
+                // Gửi yêu cầu AJAX nếu có sản phẩm nào được chọn
+                if (selectedProductIds.length > 0) {
+                    $.ajax({
+                        url: '/admin/sanpham/bo-duyet-hang-loat',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(selectedProductIds),
+                        success: function (response) {
+                            console.log("Response: ", response)
+                            if (response && response.status === "success") {
+                                location.reload(); // Reload lại trang
+                            } else {
+                                alert("Bỏ duyệt thất bại");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: ", error);
+                            alert("Lỗi: " + error)
+                        }
+
+                    });
+                } else {
+                    alert("Vui lòng chọn sản phẩm cần bỏ duyệt");
+                }
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

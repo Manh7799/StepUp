@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý đơn hàng</h1>
+            <p>Thông tin đơn hàng trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã hóa đơn</th>
+                                <th>Người mua</th>
+                                <th>Số ĐT</th>
+                                <th>Địa chỉ</th>
+                                <th>Ngày đặt</th>
+                                <th>Tổng tiền</th>
+                                <th class="text-center"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="hd, indexStat : ${lstHoaDon}">
+                                <th th:text="${indexStat.count}"></th>
+                                <td th:text="${hd.maHoaDon}"></td>
+                                <td th:text="${hd.nguoiMua}"></td>
+                                <td th:text="${hd.soDienThoai}"></td>
+                                <td th:text="${hd.diaChi}"></td>
+                                <td th:text="${hd.ngayDatHang}"></td>
+                                <td th:text="${#numbers.formatDecimal(hd.tongTien,0 , 'COMMA', 0, 'POINT')}"></td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary" > <a th:href="@{'/admin/donhang/chitiet-xem/' + ${hd.maHoaDon}}" style="color: white"> Xem </a>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

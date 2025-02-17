@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{users/home/Cart}">
+<head>
+    <meta charset="UTF-8">
+    <title> StepUp </title>
+    <link rel="stylesheet" th:href="@{/themify-icons/themify-icons.css}">
+    <script>
+        function capNhatGioHang(button) {
+            var maSanPham = button.getAttribute('data-ma-san-pham');
+            var action = button.getAttribute('data-action');
+
+            fetch('/users/giohang/' + action + '?maSanPham=' + maSanPham, {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi cập nhật giỏ hàng!');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const productCard = document.querySelector('#product-cart-' + maSanPham);
+                    if(productCard && data && Object.keys(data).length > 0){
+                        productCard.querySelector('.price[data-price="donGia"]').textContent = formatCurrency(data.donGia);
+                        productCard.querySelector('.price[data-price="soLuong"]').textContent = data.soLuong;
+                        productCard.querySelector('.price[data-price="thanhTien"]').textContent = formatCurrency(data.thanhTien);
+                    } else if(productCard){
+                        productCard.remove();
+                    }
+                    capNhatSoLuongGioHang();
+                    capNhatTongTien();
+                    capNhatModalThanhToan();
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    alert('Có lỗi xảy ra khi cập nhật giỏ hàng.');
+                });
+        }
+        function formatCurrency(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        function capNhatSoLuongGioHang(){
+            fetch('/api/giohang/soluong')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('cart-item-count').textContent = data.soLuongSanPham;
+                });
+        }
+
+        function capNhatTongTien() {
+            fetch('/users/giohang/tongtien')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi lấy thông tin tổng tiền!');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.querySelector('.total span[data-total="tongTien"]').textContent = formatCurrency(data.tongTien);
+                    document.querySelector('.grand-total span[data-total="thanhTien"]').textContent = formatCurrency(data.tongTien);
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                });
+        }
+        function capNhatModalThanhToan() {
+            fetch('/users/giohang/modal')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi lấy thông tin giỏ hàng!');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.querySelector('#ThanhToanDonHang .modal-body').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                });
+        }
+        $(document).ready(function() {
+            $('#ThanhToanDonHang').on('show.bs.modal', function (e) {
+                capNhatModalThanhToan();
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            capNhatSoLuongGioHang();
+            capNhatTongTien();
+        });
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <th:block th:if="${gioHang != null}">
+        <div th:each="gh : ${gioHang}" class="product-cart d-flex" th:id="'product-cart-' + ${gh.maSanPham}">
+            <div class="one-forth">
+                <div class="product-img">
+                    <img th:src="@{'/images/' + ${gh.anh}}" class="img-fluid"
+                         alt="Hình ảnh sản phẩm">
+                </div>
+                <div class="display-tc">
+                    <h3 th:text="${gh.tenSanPham}">Tên sản phẩm</h3>
+                </div>
+            </div>
+            <div class="one-eight text-center">
+                <div class="display-tc">
+                                <span class="price" data-price="donGia"
+                                      th:text="${#numbers.formatDecimal(gh.donGia, 0, 'COMMA', 0, 'POINT')}">0</span>
+                </div>
+            </div>
+            <div class="one-eight text-center">
+                <div class="display-tc">
+                    <span class="price" data-price="soLuong" th:text="${gh.soLuong}">0</span>
+                </div>
+            </div>
+            <div class="one-eight text-center">
+                <div class="display-tc">
+                                <span class="price" data-price="thanhTien"
+                                      th:text="${#numbers.formatDecimal(gh.thanhTien, 0, 'COMMA', 0, 'POINT')}">0</span>
+                </div>
+            </div>
+            <div class="one-eight text-center">
+                <div class="display-tc">
+                    <button class="btn btn-primary btn-update-gio-hang"
+                            th:data-ma-san-pham="${gh.maSanPham}"
+                            data-action="them"
+                            onclick="capNhatGioHang(this)"> <i class="ti-plus"></i> </button>
+                </div>
+                <div class="display-tc">
+                    <button
+                            class="btn btn-danger btn-update-gio-hang"
+                            th:data-ma-san-pham="${gh.maSanPham}"
+                            data-action="xoa"
+                            onclick="capNhatGioHang(this)"> <i class="ti-minus"></i> </button>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <div th:if="${gioHang == null}">
+        <h4>Giỏ hàng của bạn đang trống!</h4>
+    </div>
+</div>
+
+<div layout:fragment="money">
+    <div class="total">
+        <div class="sub">
+            <p style="text-align: right">Tổng tiền:<span style="text-align: right" data-total="tongTien"
+                                                         th:text="${#numbers.formatInteger(tongTien, 0, 'COMMA')}"> </span>
+                VNĐ</p>
+            <p style="text-align: right">Giá ship:<span style="text-align: right">0</span> VNĐ</p>
+            <p style="text-align: right">Giảm giá: <span style="text-align: right">0</span> VNĐ</p>
+        </div>
+        <div class="grand-total">
+            <p style="text-align: right">Thành tiền: <span style="text-align: right" data-total="thanhTien"
+                                                           th:text="${#numbers.formatInteger(tongTien, 0, 'COMMA')}"> 0 </span>
+                VNĐ</p>
+        </div>
+        <div style="text-align: right">
+            <button class="btn btn-primary" > <a th:href="@{/users/giohang/modal}" style="color: white"> Đặt hàng </a>
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    // $('#ThanhToanDonHang').on('shown.bs.modal', function () {
+    //
+    // })
+</script>
+</html>

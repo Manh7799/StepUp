@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title> Quản lý chủ đề </title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý chủ đề</h1>
+            <p>Danh sách thông tin chủ đề trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div style="text-align: right; width:100%;">
+                        <a th:href="@{/admin/chude/them}">Thêm mới</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" style="font-size: 12px">
+                            <thead>
+                            <tr>
+                                <th>Mã chủ đề</th>
+                                <th>Tên chủ đề</th>
+                                <th style="width:150px;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="c : ${lstChuDe}">
+
+                                <td>[[${c.maChuDe}]]</td>
+                                <td>[[${c.tenChuDe}]]</td>
+                                <td>
+                                    <a class="btn btn-xs btn-info"
+                                       th:href="@{'/admin/chude/sua/' + ${c.maChuDe}}">Sửa</a>
+                                    &nbsp;
+                                    <a onclick="return confirm('Bạn có chắc chắn muốn xóa thông tin này ?');"
+                                       class="btn btn-xs btn-danger"
+                                       th:href="@{'/admin/chude/xoa/' + ${c.maChuDe}}">Xóa</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý người dùng </title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý tài khoản</h1>
+            <p>Danh sách thông tin tài khoản trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="padding: 0">
+            <div class="tile" style="padding: 20px;">
+                <div class="tile-body">
+                    <div style="text-align: right; width:100%;">
+                        <a th:href="@{/admin/nguoidung/them}"> Thêm mới </a>
+                    </div>
+                    <th:block>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th> Id</th>
+                                <th> Tên đăng nhập</th>
+                                <th> Mật khẩu</th>
+                                <th> Email</th>
+                                <th> Số điện thoại</th>
+                                <th> Vai trò</th>
+                                <th> Ngày tạo</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="nd : ${lstNguoiDung}">
+                                <td th:text="${nd.idNguoiDung}"></td>
+                                <td th:text="${nd.tenDangNhap}"></td>
+                                <td th:text="${nd.matKhau}"></td>
+                                <td th:text="${nd.email}"></td>
+                                <td th:text="${nd.dienThoai}"></td>
+                                <th:block th:if="${nd.vaiTro} == 2">
+                                    <td> admin</td>
+                                </th:block>
+                                <th:block th:if="${nd.vaiTro} == 4">
+                                    <td> user</td>
+                                </th:block>
+                                <th:block th:if="${nd.vaiTro} == 1">
+                                    <td> add_product</td>
+                                </th:block>
+                                <th:block th:if="${nd.vaiTro} == 3">
+                                    <td> browse</td>
+                                </th:block>
+                                <td th:text="${nd.ngayTao}"></td>
+                                <td>
+                                    <button class="btn btn-primary"><a style="color: white"
+                                                                       th:href="@{'/admin/nguoidung/sua/' + ${nd.idNguoiDung}}">
+                                        Sửa</a>
+                                    </button>
+
+                                    <button class="btn btn-danger">
+                                        <a style="color: white"
+                                           th:href="@{'/admin/nguoidung/xoa/' + ${nd.idNguoiDung}}">Xóa</a>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

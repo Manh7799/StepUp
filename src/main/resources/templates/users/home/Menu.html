@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+    <link rel="stylesheet" th:href="@{/themify-icons/themify-icons.css}">
+</head>
+<body>
+<div th:fragment="menu">
+    <nav class="colorlib-nav" role="navigation">
+        <div class="top-menu">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-7 col-md-9">
+                        <div id="colorlib-logo"><a th:href="@{/trangchu}">StepUp</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-left menu-1">
+                            <ul>
+                                <li><a th:href="@{/trangchu}"> <i class="fa-solid fa-house"></i> Trang chủ</a>
+                                </li>
+                                <li class="has-dropdown">
+                                    <a th:href="@{/sanpham}"><i class="fa-solid fa-gift"></i> Sản phẩm </span>
+                                    </a>
+                                    <!--                                    <ul th:if="${session.userRole == 'admin' or session.userRole == 'browse' or session.userRole == 'add_product'}"-->
+                                    <!--                                        class="dropdown" style="width: 150px;">-->
+                                    <!--                                        <li th:if="${session.userRole == 'admin' or session.userRole == 'add_product'}">-->
+                                    <!--                                            <a th:href="@{/admin/sanpham/them}">Thêm sản-->
+                                    <!--                                                phẩm</a></li>-->
+                                    <!--                                        <li th:if="${session.userRole == 'admin' or session.userRole == 'browse'}"><a-->
+                                    <!--                                                th:href="@{/admin/duyetsanpham}"> Duyệt sản phẩm </a></li>-->
+                                    <!--                                        <li th:if="${session.userRole == 'admin'}"><a th:href="@{/admin/chude}"> Chủ đề </a></li>-->
+                                    <!--                                    </ul>-->
+                                </li>
+                                <li><a href="#"><i class="fa-solid fa-phone"></i> Liên hệ</a></li>
+                                <li class="has-dropdown" style="float:right;">
+                                    <th:block th:if="${session.userOnline} == null">
+                                        <a th:href="@{/dangnhap}">Đăng nhập </a>
+                                    </th:block>
+                                    <th:block th:if="${session.userOnline} != null">
+                                        <span th:href="@{#}"><i class="fa-solid fa-user"></i> <span
+                                                style="color: black"
+                                                th:text="${session.userOnline}"> </span></span>
+                                        <ul class="dropdown">
+                                            <li><a th:href="@{'/users/nguoidung/xem/' + ${session.userIdNguoiDung}}">Tài
+                                                khoản</a></li>
+                                            <li><a th:href="@{'/users/hoadon/xem-id/' + ${session.userIdNguoiDung}}">
+                                                Đơn hàng</a></li>
+                                            <th:block th:if="${session.userRole == 'admin'}">
+                                            <li><a th:href="@{/admin/sanpham}">
+                                                Trang admin </a></li>
+                                            </th:block>
+                                <li><a th:href="@{/dang-xuat}">Đăng xuất</a></li>
+                            </ul>
+                            </th:block>
+                            </li>
+                            <li class="cart"><a th:href="@{/users/giohang}"><i
+                                    class="fa-solid fa-cart-shopping"></i></i> Giỏ
+                                hàng </a>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

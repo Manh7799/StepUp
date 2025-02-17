@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{users/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title> StepUp </title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row row-pb-md">
+        <th:block th:each="s : ${lstSanPham}">
+            <th:block th:if="${s.giaTien >= 500000 && s.giaTien <= 1500000}">
+                <div class="col-lg-3 mb-4 text-center">
+                    <div class="product-entry border">
+                        <img th:src="@{'/images/'+${s.anh}}"
+                             alt="Free html5 bootstrap 4 template" width="253" height="253">
+                        <div class="desc" style="height: 94px;">
+                            <h2 style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 95%;">
+                                <span> [[${s.tenSanPham}]] </span></h2>
+                            <span class="price"
+                                  th:text="${#numbers.formatDecimal(s.giaTien,0 , 'COMMA', 0, 'POINT')}"> [[${s.giaTien}]] </span>
+                        </div>
+                        <div class="desc">
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal cho từng sản phẩm -->
+                <div th:id="'XemChiTiet' + ${s.maSanPham}" class="modal fade" tabindex="-1" role="dialog"
+                     data-bs-backdrop="static"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>[[${s.TenSanPham}]]</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body" style="padding: 0; border: 0">
+                                <div class="colorlib-about" style="padding: 0">
+                                    <div class="container">
+                                        <div class="row row-pb-lg" style="padding: 0">
+                                            <div class="col-sm-6 mb-3">
+                                                <div>
+                                                    <img th:src="@{'/images/'+${s.anh}}" class="img-fluid"
+                                                         alt="Free html5 bootstrap 4 template">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="about-wrap">
+                                                    <h2>[[${s.TenSanPham}]]</h2>
+                                                    <p>[[${s.NoiDung}]]</p>
+                                                    <p> Giá tiền: <span
+                                                            th:text="${#numbers.formatDecimal(s.giaTien,0 , 'COMMA', 0, 'POINT')}">[[${s.GiaTien}]] </span>
+                                                        đ</p>
+                                                    <button class="btn btn-primary"><a style="color: white"
+                                                                                       th:href="@{/admin/giohang/them(maSanPham=${s.maSanPham})}">Thêm
+                                                        vào giỏ
+                                                        hàng</a></button>
+                                                    &nbsp;
+                                                    <button type="button" class="btn btn-danger"
+                                                            data-dismiss="modal">Đóng
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+</div>
+
+</body>
+</html>

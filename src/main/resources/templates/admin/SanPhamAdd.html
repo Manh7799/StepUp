@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+    <link rel="stylesheet" th:href="@{/themify-icons/themify-icons.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý sách</h1>
+            <p>Danh sách thông tin sách trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <form action="#" method="post" th:action="@{/admin/sanpham/themMoiSanPham}"
+                          th:object="${sanPham}" enctype="multipart/form-data">
+                        <fieldset>
+                            <legend>Nhập thông tin sản phẩm</legend>
+                            <div class="container-fluid">
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Mã sản phẩm<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-4 ">
+                                        <input type="text" class="form-control" th:field="*{maSanPham}"/>
+                                        <td th:if="${#fields.hasErrors('maSanPham')}"
+                                            th:errors="*{maSanPham}">Bạn phải nhập mã sản phẩm
+                                        </td>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Tên sản phẩm<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" th:field="*{tenSanPham}"/>
+                                        <td th:if="${#fields.hasErrors('tenSanPham')}"
+                                            th:errors="*{tenSanPham}">Bạn phải nhập tên sản phẩm
+                                        </td>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Mô tả:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" th:field="*{moTa}"/>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Giá tiền<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" th:field="*{giaTien}"/>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Số lượng<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" th:field="*{soLuong}"/>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Nội dung<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" th:field="*{noiDung}"/>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <label class="col-md-2">
+                                        Ảnh sản phẩm<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="file" name="fUpload" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <div class="col-md-2">
+                                        Mã hãng<span style="color: red">(*)</span>:
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select th:field="*{maHang}" th:class="form-control">
+                                            <option value="" label="Chọn hãng giầy"/>
+                                            <th:block th:each="hg : ${lstHangGiay}">
+                                                <option th:value="${hg.maHang}">[[${hg.tenHang}]]
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <div class="col-md-2">
+                                        Nhà cung cấp<span style="color: red">(*)</span>:
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select th:field="*{maNhaCungCap}" th:class="form-control">
+                                            <option value="" label="Chọn nhà cung cấp"/>
+                                            <th:block th:each="ncc : ${lstNhaCungCap}">
+                                                <option th:value="${ncc.maNhaCungCap}">[[${ncc.tenNhaCungCap}]]
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <div class="col-md-2">
+                                        Chủ đề<span style="color: red">(*)</span>:
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select th:field="*{maChuDe}" th:class="form-control">
+                                            <option value="" label="Chọn chủ đề"/>
+                                            <th:block th:each="c : ${lstChuDe}">
+                                                <option th:value="${c.maChuDe}">[[${c.tenChuDe}]]
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-3" style="margin-top: 10px">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <input type="submit" class="btn btn-primary" name="btnCapNhat"
+                                               value="Cập nhật"/>
+                                        &nbsp;
+                                        <a th:href="@{/admin/sanpham}" class="btn btn-primary">Trở về</a>
+                                    </div>
+                                </div>
+                                <div class="row p-3">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-10">
+                                        <span class="text-warning">[[${message}]]</span><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

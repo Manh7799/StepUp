@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/home/Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i> Quản lý chủ đề</h1>
+            <p>Thêm mới hoặc chỉnh sửa chủ đê trong hệ thống</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <form action="#" method="post" th:action="@{/admin/chude/themMoiChuDe}"
+                          th:object="${chuDe}">
+                        <fieldset>
+                            <legend>Nhập thông tin chủ đề</legend>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <label class="col-md-2">
+                                        Mã chủ đề<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" th:field="*{maChuDe}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-2">
+                                        Tên chủ đề<span style="color: red">(*)</span>:
+                                    </label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" th:field="*{tenChuDe}"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <input type="submit" class="btn btn-primary" name="btnCapNhat"
+                                               value="Cập nhật"/>
+                                        &nbsp
+                                        <a th:href="@{/admin/chude}" class="btn btn-primary">Trở về</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-10">
+                                        <span class="text-warning">[[${message}]]</span><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

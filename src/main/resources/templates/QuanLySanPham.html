@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{users/home/Men}">
+<head>
+    <meta charset="UTF-8">
+    <title> StepUp </title>
+    <script>
+        function themSanPhamVaoGioHang(button) {
+            var maSanPham = button.getAttribute('data-ma-san-pham');
+
+            fetch('/users/giohang/them?maSanPham=' + maSanPham, {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi thêm sản phẩm vào giỏ hàng!');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Sản phẩm đã được thêm vào giỏ hàng!');
+                    alert('Thêm thành công');
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+                });
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="container">
+    <div class="colorlib-featured">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <div class="featured">
+                        <div class="featured-img featured-img-2" style="background-image: url(/css/images/men.jpg);">
+                            <h2>Thường ngày</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <div class="featured">
+                        <div class="featured-img featured-img-2" style="background-image: url(/css/images/women.jpg);">
+                            <h2>Sang trọng</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <div class="featured">
+                        <div class="featured-img featured-img-2"
+                             style="background-image: url(/css/images/item-11.jpg);">
+                            <h2>Thể Thao</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+            <h2>Tất cả sản phẩm của chúng tôi</h2>
+        </div>
+    </div>
+    <div class="colorlib-product" style="padding: 0">
+        <div class="container">
+            <div class="row row-pb-md">
+                <th:block th:each="s : ${lstSanPham}">
+                    <div class="col-lg-3 mb-4 text-center">
+                        <div class="product-entry border">
+                            <img th:src="@{'/images/'+${s.anh}}"
+                                 alt="Free html5 bootstrap 4 template" width="253" height="253">
+                            <div class="desc" style="height: 94px;">
+                                <h2 style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 95%;">
+                                    <a th:href="@{'/trangchitiet/' + ${s.maSanPham}}"> [[${s.tenSanPham}]] </a></h2>
+                                <span class="price"
+                                      th:text="${#numbers.formatDecimal(s.giaTien,0 , 'COMMA', 0, 'POINT')}"> [[${s.giaTien}]] </span>
+                            </div>
+                            <div class="desc">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" title="Xem chi tiết"
+                                        th:data-target="'#XemChiTiet' + ${s.maSanPham}">
+                                    <i class="ti-more"></i>
+                                </button>
+                                &nbsp;
+                                <button class="btn btn-primary them-vao-gio-hang" title="Thêm vào giỏ hàng"
+                                        th:data-ma-san-pham="${s.maSanPham}"
+                                        onclick="themSanPhamVaoGioHang(this)"><i class="ti-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal cho từng sản phẩm -->
+                    <div th:id="'XemChiTiet' + ${s.maSanPham}" class="modal fade" tabindex="-1" role="dialog"
+                         data-bs-backdrop="static"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5>Chi tiết sản phẩm</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="modal-body" style="padding: 0; border: 0">
+                                    <div class="colorlib-about" style="padding: 0">
+                                        <div class="container">
+                                            <div class="row row-pb-lg" style="padding: 0">
+                                                <div class="col-sm-6 mb-3">
+                                                    <div>
+                                                        <img th:src="@{'/images/'+${s.anh}}" class="img-fluid"
+                                                             alt="Free html5 bootstrap 4 template">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="about-wrap">
+                                                        <h2>[[${s.TenSanPham}]]</h2>
+                                                        <p>[[${s.NoiDung}]]</p>
+                                                        <p> Giá tiền: <span
+                                                                th:text="${#numbers.formatDecimal(s.giaTien,0 , 'COMMA', 0, 'POINT')}">[[${s.GiaTien}]] </span>
+                                                            đ</p>
+                                                        <button class="btn btn-primary them-vao-gio-hang"
+                                                                title="Thêm vào giỏ hàng"
+                                                                th:data-ma-san-pham="${s.maSanPham}"
+                                                                onclick="themSanPhamVaoGioHang(this)"> Thêm vào giỏ
+                                                            hàng </i></button>
+                                                        &nbsp;
+                                                        <button type="button" class="btn btn-danger"
+                                                                data-dismiss="modal">Đóng
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<!--<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}"></script>-->
+</html>

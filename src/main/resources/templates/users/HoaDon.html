@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{users/home/About}">
+<head>
+    <meta charset="UTF-8">
+    <title>StepUp</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p class="bread"><span><a th:href="@{'/users/hoadon/xem-id/' + ${session.userIdNguoiDung}}">Đơn hàng</a></span>/<span th:text="${session.userOnline}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="order-list">
+                    <th:block th:each="hoaDon : ${hoaDon}">
+                        <div class="order-item">
+                            <div class="row align-items-center" style="padding: 15px;">
+                                <div class="col-8">
+                                    <h6 th:text="'Mã đơn hàng: ' + ${hoaDon.maHoaDon}"></h6>
+                                    <p style="margin: 0;" th:text="'Ngày tạo: ' + ${hoaDon.ngayDatHang}"></p>
+                                    <p th:text="'Tổng tiền: ' + ${#numbers.formatDecimal(hoaDon.tongTien,0 , 'COMMA', 0, 'POINT')}"> </p>
+
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a th:href="@{'/users/hoadon/chitiet-ma/' + ${hoaDon.maHoaDon}}"
+                                       class="btn btn-primary">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .order-list {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #fff;
+    }
+
+    .order-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+</style>
+</body>
+</html>
