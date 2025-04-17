@@ -30,6 +30,7 @@
         <java.version>17</java.version>
         <hibernate-version>6.6.0.Final</hibernate-version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
